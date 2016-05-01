@@ -12,16 +12,19 @@
         <converters:NullToFalseConverter x:Key="NullToFalseConverter"/>
     </Window.Resources>
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="227*"/>
-            <RowDefinition Height="93*"/>
-        </Grid.RowDefinitions>
-        <DockPanel LastChildFill="True" Margin="0,21,371,0" Grid.RowSpan="2">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="101*"/>
+            <ColumnDefinition Width="5"/>
+            <ColumnDefinition Width="183*"/>
+        </Grid.ColumnDefinitions>
+        <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Width="10"/>
+        <DockPanel LastChildFill="True" Margin="0,21,2,32">
             <Grid>
                 <ListView Margin="10,31,0,10" ItemsSource="{Binding ViewSource.View}" SelectedItem="{Binding SelectedMessage, UpdateSourceTrigger=PropertyChanged}">
                     <ListView.View>
                         <GridView AllowsColumnReorder="False">
-                            <GridViewColumn Header="ID" Width="40" DisplayMemberBinding="{Binding MessageID}"/>
+                            <GridViewColumn Header="ID (Dec)" Width="80" DisplayMemberBinding="{Binding MessageID}"/>
+                            <GridViewColumn Header="ID (Hex)" Width="80" DisplayMemberBinding="{Binding MessageID, StringFormat=0x{0:X}}"/>
                             <GridViewColumn Header="Text" Width="Auto" DisplayMemberBinding="{Binding TextData}"/>
                         </GridView>
                     </ListView.View>
@@ -29,15 +32,18 @@
                 <xctk:WatermarkTextBox Margin="10,2,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Watermark="Type to search..." Text="{Binding SearchFilter, UpdateSourceTrigger=PropertyChanged}"/>
             </Grid>
         </DockPanel>
-        <Menu VerticalAlignment="Top">
+        <Menu VerticalAlignment="Top" Grid.ColumnSpan="3" Height="21">
             <MenuItem Header="File">
                 <MenuItem Header="Open ROM..." Command="{Binding OnRequestOpenFile}"/>
+                <MenuItem Header="Save to ROM..."/>
+                <MenuItem Header="Save to Patch..."/>
+                <MenuItem Header="Save to Extracted Data..."/>
             </MenuItem>
         </Menu>
-        <DockPanel LastChildFill="True" Margin="0,147,10,10" Grid.RowSpan="2" HorizontalAlignment="Right" Width="356">
+        <DockPanel LastChildFill="True" Margin="4,147,10,10" Grid.Column="1" Grid.ColumnSpan="2">
             <TextBox TextWrapping="Wrap" AcceptsReturn="True" Text="{Binding SelectedMessage.TextData, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" IsEnabled="{Binding SelectedMessage, Converter={StaticResource NullToFalseConverter}}"/>
         </DockPanel>
-        <DockPanel Height="116" LastChildFill="True" Margin="0,26,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="356">
+        <DockPanel Height="116" LastChildFill="True" Margin="4,26,10,0" VerticalAlignment="Top" Grid.Column="1" Grid.ColumnSpan="2">
             <Grid>
                 <GroupBox Header="Textbox Options" Margin="0,18,0,0">
                     <Grid HorizontalAlignment="Left" Width="282" Margin="0,0,0,-10">
@@ -49,5 +55,7 @@
                 </GroupBox>
             </Grid>
         </DockPanel>
+        <Button Content="Add" Margin="10,0,98,10" Command="{Binding OnRequestAddMessage}" Height="22" VerticalAlignment="Bottom"/>
+        <Button Content="Remove" Margin="0,0,2,10" HorizontalAlignment="Right" Width="94" Height="22" VerticalAlignment="Bottom"/>
     </Grid>
 </Window>

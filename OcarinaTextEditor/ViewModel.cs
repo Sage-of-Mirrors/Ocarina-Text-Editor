@@ -88,13 +88,6 @@ namespace OcarinaTextEditor
         private CollectionViewSource m_viewSource;
         #endregion
 
-        #region Command Callbacks
-        public ICommand OnRequestOpenFile
-        {
-            get { return new RelayCommand(x => Open(), x => true); }
-        }
-        #endregion
-
         #region public string SearchFilter
         public string SearchFilter
         {
@@ -115,11 +108,16 @@ namespace OcarinaTextEditor
         private string m_searchFilter;
         #endregion
 
-        private void AddFilter()
+        #region Command Callbacks
+        public ICommand OnRequestOpenFile
         {
-            ViewSource.Filter -= new FilterEventHandler(Filter);
-            ViewSource.Filter += new FilterEventHandler(Filter);
+            get { return new RelayCommand(x => Open(), x => true); }
         }
+        public ICommand OnRequestAddMessage
+        {
+            get { return new RelayCommand(x => AddMessage(), x => MessageList != null); }
+        }
+        #endregion
 
         public ViewModel()
         {
@@ -143,6 +141,30 @@ namespace OcarinaTextEditor
             }
         }
 
+        #region Adding and Removing Messages
+        private void AddMessage()
+        {
+            Message newMes = new Message();
+            newMes.MessageID = GetHighestID();
+            MessageList.Add(newMes);
+            ViewSource.View.Refresh();
+        }
+
+        private short GetHighestID()
+        {
+            short highest = short.MinValue;
+
+            foreach (Message mes in MessageList)
+            {
+                if (highest < mes.MessageID)
+                    highest = mes.MessageID;
+            }
+
+            return (short)(highest + 1);
+        }
+        #endregion
+
+        #region Search Filtering
         private void Filter(object sender, FilterEventArgs e)
         {
             // see Notes on Filter Methods:
@@ -182,5 +204,12 @@ namespace OcarinaTextEditor
             else if (src.TextData != null && !src.TextData.Contains(SearchFilter))// here is FirstName a Property in my YourCollectionItem
                 e.Accepted = false;
         }
+
+        private void AddFilter()
+        {
+            ViewSource.Filter -= new FilterEventHandler(Filter);
+            ViewSource.Filter += new FilterEventHandler(Filter);
+        }
+        #endregion
     }
 }
