@@ -4,7 +4,7 @@
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" x:Class="OcarinaTextEditor.MainWindow"
         xmlns:local="clr-namespace:OcarinaTextEditor"
         xmlns:converters="clr-namespace:OcarinaTextEditor.Converters"
-        Title="{Binding WindowTitle}" Height="350" Width="579">
+        Title="{Binding WindowTitle}" Height="450" Width="600" Icon="Resources/Ocarina_of_Time_Icon_3.ico">
     <Window.DataContext>
         <local:ViewModel/>
     </Window.DataContext>
@@ -29,7 +29,7 @@
                         </GridView>
                     </ListView.View>
                 </ListView>
-                <xctk:WatermarkTextBox Margin="10,2,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Watermark="Type to search..." Text="{Binding SearchFilter, UpdateSourceTrigger=PropertyChanged}"/>
+                <xctk:WatermarkTextBox Margin="10,2,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Watermark="Type to search..." Text="{Binding SearchFilter, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding MessageList, Converter={StaticResource NullToFalseConverter}}"/>
             </Grid>
         </DockPanel>
         <Menu VerticalAlignment="Top" Grid.ColumnSpan="3" Height="21">
@@ -40,12 +40,19 @@
                 <MenuItem Header="Save to Extracted Data..."/>
             </MenuItem>
         </Menu>
-        <DockPanel LastChildFill="True" Margin="4,147,10,10" Grid.Column="1" Grid.ColumnSpan="2">
-            <TextBox TextWrapping="Wrap" AcceptsReturn="True" Text="{Binding SelectedMessage.TextData, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" IsEnabled="{Binding SelectedMessage, Converter={StaticResource NullToFalseConverter}}"/>
+        <DockPanel LastChildFill="True" Margin="0,123,9,10" Grid.Column="2">
+            <RichTextBox>
+                <FlowDocument>
+                    <Paragraph>
+                        <Run Text="{Binding SelectedMessage.TextData}"/>
+                    </Paragraph>
+                </FlowDocument>
+            </RichTextBox>
+
         </DockPanel>
-        <DockPanel Height="116" LastChildFill="True" Margin="4,26,10,0" VerticalAlignment="Top" Grid.Column="1" Grid.ColumnSpan="2">
+        <DockPanel Height="97" LastChildFill="True" Margin="4,21,9,0" VerticalAlignment="Top" Grid.Column="1" Grid.ColumnSpan="2">
             <Grid>
-                <GroupBox Header="Textbox Options" Margin="0,18,0,0">
+                <GroupBox Header="Textbox Options" Margin="0,-3,0,0">
                     <Grid HorizontalAlignment="Left" Width="282" Margin="0,0,0,-10">
                         <Label Content="Box Type:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,10,0,0"/>
                         <Label Content="Box Position:" HorizontalAlignment="Left" Margin="0,41,0,0" VerticalAlignment="Top"/>
@@ -55,7 +62,13 @@
                 </GroupBox>
             </Grid>
         </DockPanel>
-        <Button Content="Add" Margin="10,0,98,10" Command="{Binding OnRequestAddMessage}" Height="22" VerticalAlignment="Bottom"/>
-        <Button Content="Remove" Margin="0,0,2,10" HorizontalAlignment="Right" Width="94" Height="22" VerticalAlignment="Bottom"/>
+        <Grid Margin="10,379,2,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Button Content="Add" Margin="0,0,7,10" Command="{Binding OnRequestAddMessage}" Height="22" VerticalAlignment="Bottom"/>
+            <Button Content="Remove" Margin="8,0,0,10" Command="{Binding OnRequestRemoveMessage}" Height="22" VerticalAlignment="Bottom" Grid.Column="1"/>
+        </Grid>
     </Grid>
 </Window>

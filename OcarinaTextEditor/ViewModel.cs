@@ -117,6 +117,10 @@ namespace OcarinaTextEditor
         {
             get { return new RelayCommand(x => AddMessage(), x => MessageList != null); }
         }
+        public ICommand OnRequestRemoveMessage
+        {
+            get { return new RelayCommand(x => RemoveMessage(), x => MessageList != null); }
+        }
         #endregion
 
         public ViewModel()
@@ -148,6 +152,20 @@ namespace OcarinaTextEditor
             newMes.MessageID = GetHighestID();
             MessageList.Add(newMes);
             ViewSource.View.Refresh();
+        }
+
+        private void RemoveMessage()
+        {
+            int selectedIndex = MessageList.IndexOf(SelectedMessage);
+            MessageList.Remove(SelectedMessage);
+
+            if (MessageList.Count == 0)
+                MessageList.Add(new Message());
+
+            if (selectedIndex == 0)
+                SelectedMessage = MessageList[0];
+            else
+                SelectedMessage = MessageList[selectedIndex - 1];
         }
 
         private short GetHighestID()
