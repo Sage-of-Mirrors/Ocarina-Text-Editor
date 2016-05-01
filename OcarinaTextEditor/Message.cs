@@ -237,6 +237,10 @@ namespace OcarinaTextEditor
                     {
                         data.Add(1);
                     }
+                    else if (TextData[i] == '\r')
+                    {
+
+                    }
                     else
                     {
                         data.Add((byte)TextData[i]);
