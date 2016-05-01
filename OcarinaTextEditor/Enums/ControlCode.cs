@@ -37,6 +37,22 @@ namespace OcarinaTextEditor.Enums
         Three_Choices = 0x1C,
         Fish_Weight = 0x1D,
         High_Score = 0x1E,
-        Time = 0x1F
+        Time = 0x1F,
+
+        Dash = 0x7F,
+
+        A_Button = 0x9F,
+        B_Button = 0xA0,
+        C_Button = 0xA1,
+        L_Button = 0xA2,
+        R_Button = 0xA3,
+        Z_Button = 0xA4,
+        C_Up = 0xA5,
+        C_Down = 0xA6,
+        C_Left = 0xA7,
+        C_Right = 0xA8,
+        Triangle = 0xA9,
+        Control_Stick = 0xAA,
+        D_Pad = 0xAB
     }
 }

@@ -35,9 +35,9 @@
         <Menu VerticalAlignment="Top" Grid.ColumnSpan="3" Height="21">
             <MenuItem Header="File">
                 <MenuItem Header="Open ROM..." Command="{Binding OnRequestOpenFile}"/>
-                <MenuItem Header="Save to ROM..."/>
-                <MenuItem Header="Save to Patch..."/>
-                <MenuItem Header="Save to Extracted Data..."/>
+                <MenuItem Header="Save to ROM..." Command="{Binding OnRequestSaveFileROM}"/>
+                <MenuItem Header="Save to Patch..." Command="{Binding OnRequestSaveFilePatch}"/>
+                <MenuItem Header="Save to Extracted Data..." Command="{Binding OnRequestSaveFileFiles}"/>
             </MenuItem>
         </Menu>
         <DockPanel LastChildFill="True" Margin="0,123,9,10" Grid.Column="2">

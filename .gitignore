@@ -234,3 +234,5 @@ _Pvt_Extensions
 
 # FAKE - F# Make
 .fake/
+OcarinaTextEditor/Resources/Ocarina_of_Time_Icon.ico
+OcarinaTextEditor/Resources/Ocarina_of_Time_Icon_2.ico

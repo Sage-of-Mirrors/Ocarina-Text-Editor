@@ -56,9 +56,16 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>lib\EndianBinaryStreams.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.WindowsAPICodePack">
+      <HintPath>..\packages\Microsoft.WindowsAPICodePack.Core.1.1.0\lib\Microsoft.WindowsAPICodePack.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAPICodePack.Shell">
+      <HintPath>..\packages\Microsoft.WindowsAPICodePack.Shell.1.1.0\lib\Microsoft.WindowsAPICodePack.Shell.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -97,8 +104,11 @@
     <Compile Include="Converters\NullToFalseConverter.cs" />
     <Compile Include="Enums\Color.cs" />
     <Compile Include="Enums\ControlCode.cs" />
+    <Compile Include="Enums\ExportType.cs" />
     <Compile Include="Enums\TextboxPosition.cs" />
     <Compile Include="Enums\TextboxType.cs" />
+    <Compile Include="Exporter.cs" />
+    <Compile Include="ExtensionMethods.cs" />
     <Compile Include="Importer.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="RelayCommand.cs" />

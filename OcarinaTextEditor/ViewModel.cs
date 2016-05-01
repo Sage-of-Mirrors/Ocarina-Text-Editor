@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using Microsoft.WindowsAPICodePack.Dialogs;
 using Microsoft.Win32;
 using System.Text;
 using System.Threading.Tasks;
@@ -113,6 +114,18 @@ namespace OcarinaTextEditor
         {
             get { return new RelayCommand(x => Open(), x => true); }
         }
+        public ICommand OnRequestSaveFileROM
+        {
+            get { return new RelayCommand(x => SaveToRom(), x => MessageList != null); }
+        }
+        public ICommand OnRequestSaveFileFiles
+        {
+            get { return new RelayCommand(x => SaveToFiles(), x => MessageList != null); }
+        }
+        public ICommand OnRequestSaveFilePatch
+        {
+            get { return new RelayCommand(x => SaveToPatch(), x => false); }
+        }
         public ICommand OnRequestAddMessage
         {
             get { return new RelayCommand(x => AddMessage(), x => MessageList != null); }
@@ -143,6 +156,42 @@ namespace OcarinaTextEditor
 
                 WindowTitle = string.Format("{0} - Ocarina of Time Text Editor", openFile.FileName);
             }
+        }
+
+        private void SaveToRom()
+        {
+            SaveFileDialog saveFile = new SaveFileDialog();
+            saveFile.Filter = "N64 ROMs (*.n64)|*.n64|All files|*";
+
+            if (saveFile.ShowDialog() == true)
+            {
+                Exporter export = new Exporter(m_messageList, saveFile.FileName, Enums.ExportType.ROM);
+            }
+        }
+
+        private void SaveToFiles()
+        {
+            var ofd = new CommonOpenFileDialog();
+            ofd.Title = "Choose Directory";
+            ofd.IsFolderPicker = true;
+            ofd.AddToMostRecentlyUsedList = false;
+            ofd.AllowNonFileSystemItems = false;
+            ofd.EnsureFileExists = true;
+            ofd.EnsurePathExists = true;
+            ofd.EnsureReadOnly = false;
+            ofd.EnsureValidNames = true;
+            ofd.Multiselect = false;
+            ofd.ShowPlacesList = true;
+
+            if (ofd.ShowDialog() == CommonFileDialogResult.Ok)
+            {
+                Exporter export = new Exporter(m_messageList, ofd.FileName, Enums.ExportType.File);
+            }
+        }
+
+        private void SaveToPatch()
+        {
+            throw new NotImplementedException();
         }
 
         #region Adding and Removing Messages
