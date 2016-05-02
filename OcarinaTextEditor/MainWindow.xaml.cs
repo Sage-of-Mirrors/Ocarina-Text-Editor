@@ -28,5 +28,12 @@ namespace OcarinaTextEditor
             BoxTypeCombo.ItemsSource = Enum.GetValues(typeof(TextboxType)).Cast<TextboxType>();
             BoxPositionCombo.ItemsSource = Enum.GetValues(typeof(TextboxPosition)).Cast<TextboxPosition>();
         }
+
+        private void TextBox_SelectionChanged(object sender, RoutedEventArgs e)
+        {
+            ViewModel view = (ViewModel)DataContext;
+            TextBox box = sender as TextBox;
+            view.TextboxPosition = box.SelectionStart;
+        }
     }
 }

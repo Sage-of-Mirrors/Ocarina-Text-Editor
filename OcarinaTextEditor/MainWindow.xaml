@@ -41,7 +41,30 @@
             </MenuItem>
         </Menu>
         <DockPanel LastChildFill="True" Margin="0,123,9,10" Grid.Column="2">
-            <TextBox TextWrapping="Wrap" Text="{Binding SelectedMessage.TextData, UpdateSourceTrigger=PropertyChanged}" AcceptsReturn="True" IsEnabled="{Binding SelectedMessage, Converter={StaticResource NullToFalseConverter}}"/>
+            <TextBox TextWrapping="Wrap" Text="{Binding SelectedMessage.TextData, UpdateSourceTrigger=PropertyChanged}" AcceptsReturn="True" IsEnabled="{Binding SelectedMessage, Converter={StaticResource NullToFalseConverter}}" SelectionChanged="TextBox_SelectionChanged">
+                <TextBox.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Cut" Command="ApplicationCommands.Cut"/>
+                        <MenuItem Header="Copy" Command="ApplicationCommands.Copy"/>
+                        <MenuItem Header="Paste" Command="ApplicationCommands.Paste"/>
+                        <Separator/>
+                        <MenuItem Header="Control Tags...">
+                            <MenuItem Header="Color" Command="{Binding OnRequestAddControl}" CommandParameter="Color:White"/>
+                            <MenuItem Header="Box Break" Command="{Binding OnRequestAddControl}" CommandParameter="Box Break"/>
+                            <MenuItem Header="Player Name" Command="{Binding OnRequestAddControl}" CommandParameter="Player"/>
+                            <MenuItem Header="No Skip" Command="{Binding OnRequestAddControl}" CommandParameter="No Skip"/>
+                            <MenuItem Header="Icon" Command="{Binding OnRequestAddControl}" CommandParameter="Icon:0"/>
+                            <MenuItem Header="Speed" Command="{Binding OnRequestAddControl}" CommandParameter="Speed:0"/>
+                            <Separator/>
+                            <MenuItem Header="Draw Instant" Command="{Binding OnRequestAddControl}" CommandParameter="Draw Instant"/>
+                            <MenuItem Header="Draw Char" Command="{Binding OnRequestAddControl}" CommandParameter="Draw Char"/>
+                            <Separator/>
+                            <MenuItem Header="Two Choices" Command="{Binding OnRequestAddControl}" CommandParameter="Two Choices"/>
+                            <MenuItem Header="Three Choices" Command="{Binding OnRequestAddControl}" CommandParameter="Three Choices"/>
+                        </MenuItem>
+                    </ContextMenu>
+                </TextBox.ContextMenu>
+            </TextBox>
         </DockPanel>
         <DockPanel Height="97" LastChildFill="True" Margin="4,21,9,0" VerticalAlignment="Top" Grid.Column="1" Grid.ColumnSpan="2">
             <Grid>

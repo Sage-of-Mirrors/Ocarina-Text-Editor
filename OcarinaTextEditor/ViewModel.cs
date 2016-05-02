@@ -112,6 +112,8 @@ namespace OcarinaTextEditor
 
         private Dictionary<ControlCode, string> m_controlCodes;
 
+        public int TextboxPosition;
+
         #region Command Callbacks
         public ICommand OnRequestOpenFile
         {
@@ -137,6 +139,10 @@ namespace OcarinaTextEditor
         {
             get { return new RelayCommand(x => RemoveMessage(), x => MessageList != null); }
         }
+        public ICommand OnRequestAddControl
+        {
+            get { return new RelayCommand(x => InsertControlCode((string)x), x => SelectedMessage != null); }
+        }
         #endregion
 
         public ViewModel()
@@ -146,12 +152,13 @@ namespace OcarinaTextEditor
             m_controlCodes = PopulateCodeDictionary();
         }
 
+        #region Input/Output
         private void Open()
         {
             OpenFileDialog openFile = new OpenFileDialog();
 
-            openFile.Filter = "N64 ROMs (*.n64)|*.n64|All files|*";
-            
+            openFile.Filter = "N64 ROMs (*.n64)|*.n64|N64 ROMs (*.z64)|*.z64|All files|*";
+
             if (openFile.ShowDialog() == true)
             {
                 Importer file = new Importer(openFile.FileName, m_controlCodes);
@@ -166,7 +173,7 @@ namespace OcarinaTextEditor
         private void SaveToRom()
         {
             SaveFileDialog saveFile = new SaveFileDialog();
-            saveFile.Filter = "N64 ROMs (*.n64)|*.n64|All files|*";
+            saveFile.Filter = "N64 ROMs (*.n64)|*.n64|N64 ROMs (*.z64)|*.z64|All files|*";
 
             if (saveFile.ShowDialog() == true)
             {
@@ -198,6 +205,7 @@ namespace OcarinaTextEditor
         {
             throw new NotImplementedException();
         }
+        #endregion
 
         #region Adding and Removing Messages
         private void AddMessage()
@@ -283,6 +291,11 @@ namespace OcarinaTextEditor
             ViewSource.Filter += new FilterEventHandler(Filter);
         }
         #endregion
+
+        private void InsertControlCode(string code)
+        {
+            SelectedMessage.TextData = SelectedMessage.TextData.Insert(TextboxPosition,string.Format("<{0}>", code));
+        }
 
         private Dictionary<ControlCode, string> PopulateCodeDictionary()
         {
