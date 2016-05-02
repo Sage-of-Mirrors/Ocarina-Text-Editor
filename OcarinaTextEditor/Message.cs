@@ -91,7 +91,7 @@ namespace OcarinaTextEditor
             TextData = "";
         }
 
-        public Message(EndianBinaryReader reader)
+        public Message(EndianBinaryReader reader, Dictionary<ControlCode, string> controlCodeDict)
         {
             MessageID = reader.ReadInt16();
 
@@ -110,7 +110,7 @@ namespace OcarinaTextEditor
 
             reader.BaseStream.Position = 0x8C6000 + offset;
 
-            GetStringData(reader);
+            GetStringData(reader, controlCodeDict);
 
             reader.BaseStream.Position = cuPos;
         }
@@ -121,7 +121,7 @@ namespace OcarinaTextEditor
             Console.Write(printString);
         }
 
-        private void GetStringData(EndianBinaryReader reader)
+        private void GetStringData(EndianBinaryReader reader, Dictionary<ControlCode, string> codeDict)
         {
             List<char> charData = new List<char>();
 
@@ -131,13 +131,9 @@ namespace OcarinaTextEditor
             {
                 bool readControlCode = false;
 
-                foreach (ControlCode code in Enum.GetValues(typeof(ControlCode)))
+                if (codeDict.ContainsKey((ControlCode)testByte))
                 {
-                    if ((ControlCode)testByte == code)
-                    {
-                        charData.AddRange(GetControlCode((ControlCode)testByte, reader));
-                        readControlCode = true;
-                    }
+                    charData.AddRange(GetControlCode((ControlCode)testByte, reader, codeDict));
                 }
 
                 if (!readControlCode)
@@ -154,9 +150,15 @@ namespace OcarinaTextEditor
             TextData = new String(charData.ToArray());
         }
 
-        private char[] GetControlCode(ControlCode code, EndianBinaryReader reader)
+        private char[] GetControlCode(ControlCode code, EndianBinaryReader reader, Dictionary<ControlCode, string> codeDict)
         {
             List<char> codeBank = new List<char>();
+
+            if (codeDict.First(x => x.Key == code).Value.Count() == 1)
+            {
+                codeBank.AddRange(codeDict[code].ToCharArray());
+                return codeBank.ToArray();
+            }
 
             string codeInsides = "";
 
@@ -200,6 +202,7 @@ namespace OcarinaTextEditor
                     short msgID = reader.ReadInt16();
                     codeInsides = string.Format("{0}:{1}", "Jump", msgID);
                     break;
+
                 default:
                     codeInsides = code.ToString().Replace("_", " ");
                     break;
@@ -224,7 +227,7 @@ namespace OcarinaTextEditor
             writer.Write((int)0);
         }
 
-        public List<byte> ConvertTextData()
+        public List<byte> ConvertTextData(Dictionary<ControlCode, string> codeDict)
         {
             List<byte> data = new List<byte>();
 
@@ -233,13 +236,17 @@ namespace OcarinaTextEditor
                 // Not a control code, copy char to output buffer
                 if (TextData[i] != '<')
                 {
-                    if (TextData[i] == '\n')
+                    if (codeDict.ContainsValue(TextData[i].ToString()))
                     {
-                        data.Add(1);
+                        data.Add((byte)codeDict.First(x => x.Value == TextData[i].ToString()).Key);
+                    }
+                    else if (TextData[i] == '\n')
+                    {
+                        data.Add((byte)ControlCode.Line_Break);
                     }
                     else if (TextData[i] == '\r')
                     {
-
+                        // Do nothing
                     }
                     else
                     {

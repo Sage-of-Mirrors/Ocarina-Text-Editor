@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Data;
+using OcarinaTextEditor.Enums;
 
 namespace OcarinaTextEditor
 {
@@ -109,6 +110,8 @@ namespace OcarinaTextEditor
         private string m_searchFilter;
         #endregion
 
+        private Dictionary<ControlCode, string> m_controlCodes;
+
         #region Command Callbacks
         public ICommand OnRequestOpenFile
         {
@@ -139,6 +142,8 @@ namespace OcarinaTextEditor
         public ViewModel()
         {
             ViewSource = new CollectionViewSource();
+
+            m_controlCodes = PopulateCodeDictionary();
         }
 
         private void Open()
@@ -149,7 +154,7 @@ namespace OcarinaTextEditor
             
             if (openFile.ShowDialog() == true)
             {
-                Importer file = new Importer(openFile.FileName);
+                Importer file = new Importer(openFile.FileName, m_controlCodes);
                 MessageList = file.GetMessageList();
                 ViewSource.Source = MessageList;
                 SelectedMessage = MessageList[0];
@@ -165,7 +170,7 @@ namespace OcarinaTextEditor
 
             if (saveFile.ShowDialog() == true)
             {
-                Exporter export = new Exporter(m_messageList, saveFile.FileName, Enums.ExportType.ROM);
+                Exporter export = new Exporter(m_messageList, saveFile.FileName, Enums.ExportType.ROM, m_controlCodes);
             }
         }
 
@@ -185,7 +190,7 @@ namespace OcarinaTextEditor
 
             if (ofd.ShowDialog() == CommonFileDialogResult.Ok)
             {
-                Exporter export = new Exporter(m_messageList, ofd.FileName, Enums.ExportType.File);
+                Exporter export = new Exporter(m_messageList, ofd.FileName, Enums.ExportType.File, m_controlCodes);
             }
         }
 
@@ -278,5 +283,17 @@ namespace OcarinaTextEditor
             ViewSource.Filter += new FilterEventHandler(Filter);
         }
         #endregion
+
+        private Dictionary<ControlCode, string> PopulateCodeDictionary()
+        {
+            Dictionary<ControlCode, string> output = new Dictionary<ControlCode, string>();
+
+            foreach (ControlCode code in Enum.GetValues(typeof(ControlCode)))
+            {
+                output.Add(code, code.ToString().Replace("_", " "));
+            }
+
+            return output;
+        }
     }
 }

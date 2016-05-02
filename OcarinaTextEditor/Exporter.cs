@@ -21,8 +21,11 @@ namespace OcarinaTextEditor
 
         }
 
-        public Exporter(ObservableCollection<Message> messageList, string fileName, ExportType exportType)
+        public Exporter(ObservableCollection<Message> messageList, string fileName, ExportType exportType, Dictionary<ControlCode, string> codeDict)
         {
+            byte[] alphabetStartOffset;
+            byte[] alphabetEndOffset;
+
             m_messageList = messageList;
             m_fileName = fileName;
 
@@ -43,12 +46,15 @@ namespace OcarinaTextEditor
                     byte[] decompOffset = BitConverter.GetBytes(stringOffset);
                     decompOffset[3] = 0x07;
 
+                    if (mes.MessageID == -3)
+                        alphabetStartOffset = decompOffset;
+
                     for (int i = 3; i > -1; i--)
                     {
                         messageTableWriter.Write(decompOffset[i]);
                     }
 
-                    stringBank.AddRange(mes.ConvertTextData());
+                    stringBank.AddRange(mes.ConvertTextData(codeDict));
                     stringBank.Add(0x02);
 
                     ExtensionMethods.PadByteList4(stringBank);

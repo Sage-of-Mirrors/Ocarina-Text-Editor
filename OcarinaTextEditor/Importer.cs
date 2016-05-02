@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using GameFormatReader.Common;
 using System.IO;
+using OcarinaTextEditor.Enums;
 
 namespace OcarinaTextEditor
 {
@@ -18,7 +19,7 @@ namespace OcarinaTextEditor
             m_messageList = new ObservableCollection<Message>();
         }
 
-        public Importer(string fileName)
+        public Importer(string fileName, Dictionary<ControlCode, string> controlCodeDict)
         {
             m_messageList = new ObservableCollection<Message>();
 
@@ -30,7 +31,7 @@ namespace OcarinaTextEditor
 
                 while (reader.PeekReadInt16() != -1)
                 {
-                    Message mes = new Message(reader);
+                    Message mes = new Message(reader, controlCodeDict);
 
                     m_messageList.Add(mes);
                 }
