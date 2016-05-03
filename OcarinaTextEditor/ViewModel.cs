@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Data;
 using OcarinaTextEditor.Enums;
+using System.IO;
 
 namespace OcarinaTextEditor
 {
@@ -113,6 +114,8 @@ namespace OcarinaTextEditor
         private Dictionary<ControlCode, string> m_controlCodes;
 
         public int TextboxPosition;
+
+        private MemoryStream m_inputFile;
 
         #region Command Callbacks
         public ICommand OnRequestOpenFile

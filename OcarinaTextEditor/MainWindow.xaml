@@ -49,7 +49,16 @@
                         <MenuItem Header="Paste" Command="ApplicationCommands.Paste"/>
                         <Separator/>
                         <MenuItem Header="Control Tags...">
-                            <MenuItem Header="Color" Command="{Binding OnRequestAddControl}" CommandParameter="Color:White"/>
+                            <MenuItem Header="Color">
+                                <MenuItem Header="White" Command="{Binding OnRequestAddControl}" CommandParameter="Color:White"/>
+                                <MenuItem Header="Red" Command="{Binding OnRequestAddControl}" CommandParameter="Color:Red"/>
+                                <MenuItem Header="Green" Command="{Binding OnRequestAddControl}" CommandParameter="Color:Green"/>
+                                <MenuItem Header="Blue" Command="{Binding OnRequestAddControl}" CommandParameter="Color:Blue"/>
+                                <MenuItem Header="Light_Blue" Command="{Binding OnRequestAddControl}" CommandParameter="Color:Light_Blue"/>
+                                <MenuItem Header="Pink" Command="{Binding OnRequestAddControl}" CommandParameter="Color:Pink"/>
+                                <MenuItem Header="Yellow" Command="{Binding OnRequestAddControl}" CommandParameter="Color:Yellow"/>
+                                <MenuItem Header="Black" Command="{Binding OnRequestAddControl}" CommandParameter="Color:Black"/>
+                            </MenuItem>
                             <MenuItem Header="Box Break" Command="{Binding OnRequestAddControl}" CommandParameter="Box Break"/>
                             <MenuItem Header="Player Name" Command="{Binding OnRequestAddControl}" CommandParameter="Player"/>
                             <MenuItem Header="No Skip" Command="{Binding OnRequestAddControl}" CommandParameter="No Skip"/>

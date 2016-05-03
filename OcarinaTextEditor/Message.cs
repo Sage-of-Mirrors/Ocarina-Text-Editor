@@ -134,6 +134,7 @@ namespace OcarinaTextEditor
                 if (codeDict.ContainsKey((ControlCode)testByte))
                 {
                     charData.AddRange(GetControlCode((ControlCode)testByte, reader, codeDict));
+                    readControlCode = true;
                 }
 
                 if (!readControlCode)
@@ -176,7 +177,7 @@ namespace OcarinaTextEditor
                     return "\n".ToCharArray();
                 case ControlCode.Spaces:
                     byte numSpaces = reader.ReadByte();
-                    codeInsides = string.Format("{0}:{1}", "Spaces", numSpaces);
+                    codeInsides = string.Format("{0}:{1}", "Pixels Right", numSpaces);
                     break;
                 case ControlCode.Delay:
                     byte numFrames = reader.ReadByte();
@@ -202,6 +203,8 @@ namespace OcarinaTextEditor
                     short msgID = reader.ReadInt16();
                     codeInsides = string.Format("{0}:{1}", "Jump", msgID);
                     break;
+                case ControlCode.Box_Break:
+                    return "\n\n".ToCharArray();
 
                 default:
                     codeInsides = code.ToString().Replace("_", " ");
@@ -242,7 +245,21 @@ namespace OcarinaTextEditor
                     }
                     else if (TextData[i] == '\n')
                     {
-                        data.Add((byte)ControlCode.Line_Break);
+                        try
+                        {
+                            if (TextData[i + 2] == '\n')
+                                data.Add((byte)ControlCode.Box_Break);
+                            else if (TextData[i - 2] == '\n')
+                            {
+                                // Do nothing
+                            }
+                            else
+                                data.Add((byte)ControlCode.Line_Break);
+                        }
+                        catch (IndexOutOfRangeException ex)
+                        {
+                            data.Add((byte)ControlCode.Line_Break);
+                        }
                     }
                     else if (TextData[i] == '\r')
                     {
@@ -289,172 +306,172 @@ namespace OcarinaTextEditor
         {
             List<byte> output = new List<byte>();
 
-            switch (code[0])
+            switch (code[0].ToLower())
             {
-                case "Line Break":
+                case "line break":
                     output.Add((byte)ControlCode.Line_Break);
                     break;
-                case "Box Break":
+                case "box break":
                     output.Add((byte)ControlCode.Box_Break);
                     break;
-                case "Color":
+                case "color":
                     output.Add((byte)ControlCode.Color);
-                    switch (code[1])
+                    switch (code[1].ToLower())
                     {
-                        case "White":
+                        case "white":
                             output.Add((byte)Color.White);
                             break;
-                        case "Red":
+                        case "red":
                             output.Add((byte)Color.Red);
                             break;
-                        case "Green":
+                        case "green":
                             output.Add((byte)Color.Green);
                             break;
-                        case "Blue":
+                        case "blue":
                             output.Add((byte)Color.Blue);
                             break;
-                        case "Light_Blue":
+                        case "light_blue":
                             output.Add((byte)Color.Light_Blue);
                             break;
-                        case "Pink":
+                        case "pink":
                             output.Add((byte)Color.Pink);
                             break;
-                        case "Yellow":
+                        case "yellow":
                             output.Add((byte)Color.Yellow);
                             break;
-                        case "Black":
+                        case "black":
                             output.Add((byte)Color.Black);
                             break;
                     }
                     break;
-                case "Spaces":
+                case "pixels right":
                     output.Add((byte)ControlCode.Spaces);
                     output.Add(Convert.ToByte(code[1]));
                     break;
-                case "Jump":
+                case "jump":
                     output.Add((byte)ControlCode.Jump);
                     byte[] jumpIDBytes = BitConverter.GetBytes(Convert.ToInt16(code[1]));
                     output.Add(jumpIDBytes[1]);
                     output.Add(jumpIDBytes[0]);
                     break;
-                case "Draw Instant":
+                case "draw instant":
                     output.Add((byte)ControlCode.Draw_Instant);
                     break;
-                case "Draw Char":
+                case "draw char":
                     output.Add((byte)ControlCode.Draw_Char);
                     break;
-                case "Shop Description":
+                case "shop description":
                     output.Add((byte)ControlCode.Shop_Description);
                     break;
-                case "Event":
+                case "event":
                     output.Add((byte)ControlCode.Event);
                     break;
-                case "Delay":
+                case "delay":
                     output.Add((byte)ControlCode.Delay);
                     output.Add(Convert.ToByte(code[1]));
                     break;
-                case "Fade":
+                case "fade":
                     output.Add((byte)ControlCode.Fade);
                     output.Add(Convert.ToByte(code[1]));
                     break;
-                case "Player":
+                case "player":
                     output.Add((byte)ControlCode.Player);
                     break;
-                case "Ocarina":
+                case "ocarina":
                     output.Add((byte)ControlCode.Ocarina);
                     break;
-                case "Sound":
+                case "sound":
                     output.Add((byte)ControlCode.Sound);
                     byte[] soundIDBytes = BitConverter.GetBytes(Convert.ToInt16(code[1]));
                     output.Add(soundIDBytes[1]);
                     output.Add(soundIDBytes[0]);
                     break;
-                case "Icon":
+                case "icon":
                     output.Add((byte)ControlCode.Icon);
                     output.Add(Convert.ToByte(code[1]));
                     break;
-                case "Speed":
+                case "speed":
                     output.Add((byte)ControlCode.Speed);
                     output.Add(Convert.ToByte(code[1]));
                     break;
-                case "Background":
+                case "background":
                     output.Add((byte)ControlCode.Background);
                     //byte[] backgroundIDBytes = BitConverter.GetBytes(Convert.ToInt32(code[1]));
                     //output.Add(backgroundIDBytes[3]);
                     //output.Add(backgroundIDBytes[2]);
                     //output.Add(backgroundIDBytes[1]);
                     break;
-                case "Marathon Time":
+                case "marathon time":
                     output.Add((byte)ControlCode.Marathon_Time);
                     break;
-                case "Race Time":
+                case "race time":
                     output.Add((byte)ControlCode.Race_Time);
                     break;
-                case "Points":
+                case "points":
                     output.Add((byte)ControlCode.Points);
                     break;
-                case "Gold Skulltulas":
+                case "gold skulltulas":
                     output.Add((byte)ControlCode.Gold_Skulltulas);
                     break;
-                case "No Skip":
+                case "no skip":
                     output.Add((byte)ControlCode.No_Skip);
                     break;
-                case "Two Choices":
+                case "two choices":
                     output.Add((byte)ControlCode.Two_Choices);
                     break;
-                case "Three Choices":
+                case "three choices":
                     output.Add((byte)ControlCode.Three_Choices);
                     break;
-                case "Fish Weight":
+                case "fish weight":
                     output.Add((byte)ControlCode.Fish_Weight);
                     break;
-                case "High Score":
+                case "high score":
                     output.Add((byte)ControlCode.High_Score);
                     //output.Add(Convert.ToByte(code[1]));
                     break;
-                case "Time":
+                case "time":
                     output.Add((byte)ControlCode.Time);
                     break;
-                case "Dash":
+                case "dash":
                     output.Add((byte)ControlCode.Dash);
                     break;
-                case "A Button":
+                case "a button":
                     output.Add((byte)ControlCode.A_Button);
                     break;
-                case "B Button":
+                case "b button":
                     output.Add((byte)ControlCode.B_Button);
                     break;
-                case "C Button":
+                case "c button":
                     output.Add((byte)ControlCode.C_Button);
                     break;
-                case "L Button":
+                case "l button":
                     output.Add((byte)ControlCode.L_Button);
                     break;
-                case "R Button":
+                case "r button":
                     output.Add((byte)ControlCode.R_Button);
                     break;
-                case "Z Button":
+                case "z button":
                     output.Add((byte)ControlCode.Z_Button);
                     break;
-                case "C Up":
+                case "c up":
                     output.Add((byte)ControlCode.C_Up);
                     break;
-                case "C Down":
+                case "c down":
                     output.Add((byte)ControlCode.C_Down);
                     break;
-                case "C Left":
+                case "c left":
                     output.Add((byte)ControlCode.C_Left);
                     break;
-                case "C Right":
+                case "c right":
                     output.Add((byte)ControlCode.C_Right);
                     break;
-                case "Triangle":
+                case "triangle":
                     output.Add((byte)ControlCode.Triangle);
                     break;
-                case "Control Stick":
+                case "control stick":
                     output.Add((byte)ControlCode.Control_Stick);
                     break;
-                case "D Pad":
+                case "d pad":
                     output.Add((byte)ControlCode.D_Pad);
                     break;
             }
