@@ -1,6 +1,7 @@
 # Ocarina-Text-Editor
 A text editor for The Legend of Zelda: Ocarina of Time. This editor currently only works on the Master Quest Debug version. Other versions may be supported in the future.
-.
+
+
 ![Program image](http://i.imgur.com/mdevXFf.png)
 
 ## Features
@@ -23,7 +24,7 @@ For example, msgid:20 will search for a message with an ID of 20. The ID must be
 ### Control Tags
 
 *Ocarina of Time* uses control codes to modify the text as it draws, such as changing the color or inserting special characters. In the editor, most of these
-are represented by text between < and > chevrons. Detail information about control tags and how they are used in the editor can be found [here]().
+are represented by text between < and > chevrons. Detail information about control tags and how they are used in the editor can be found [here](https://github.com/Sage-of-Mirrors/Ocarina-Text-Editor/wiki/Control-Tags).
 
 ## Textbox Types
 
