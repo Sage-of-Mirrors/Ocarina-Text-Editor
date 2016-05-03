@@ -79,6 +79,7 @@ namespace OcarinaTextEditor
                             ExportToFile(messageTableWriter, stringWriter);
                             break;
                         case ExportType.Patch:
+                            ExportToPatch(messageTableStream, stringData);
                             break;
                         case ExportType.ROM:
                             ExportToRom(messageTableStream, stringData);
@@ -100,9 +101,66 @@ namespace OcarinaTextEditor
             }
         }
 
-        private void ExportToPatch()
+        private void ExportToPatch(MemoryStream table, MemoryStream stringBank)
         {
+            EndianBinaryReader tableReader = new EndianBinaryReader(table, Endian.Big);
+            EndianBinaryReader stringReader = new EndianBinaryReader(stringBank, Endian.Big);
 
+            using (FileStream patchFile = new FileStream(m_fileName, FileMode.Create))
+            {
+                EndianBinaryWriter writer = new EndianBinaryWriter(patchFile, Endian.Big);
+
+                writer.Write("PPF30".ToArray());
+                writer.Write((byte)2);
+                writer.Write("This patch was made by Ocarina Text Editor.       ".ToArray());
+                writer.Write((int)0);
+
+                int numChunks = (int)Math.Floor((double)stringBank.Length / 255) + 1;
+
+                long offset = 0x8C6000;
+
+                for (int i = 0; i < numChunks; i++)
+                {
+                    writer.CurrentEndian = Endian.Little;
+                    writer.Write(offset);
+                    writer.CurrentEndian = Endian.Big;
+
+                    writer.Write((byte)255);
+
+                    for (int j = 0; j < 255; j++)
+                    {
+                        if (stringReader.BaseStream.Position != stringReader.BaseStream.Length - 1)
+                            writer.Write(stringReader.ReadByte());
+                        else
+                            writer.Write((byte)0);
+                    }
+
+                    offset += 255;
+                }
+
+                numChunks = (int)Math.Floor((double)table.Length / 255) + 1;
+
+                offset = 0x00BC24C0;
+
+                for (int i = 0; i < numChunks; i++)
+                {
+                    writer.CurrentEndian = Endian.Little;
+                    writer.Write(offset);
+                    writer.CurrentEndian = Endian.Big;
+
+                    writer.Write((byte)255);
+
+                    for (int j = 0; j < 255; j++)
+                    {
+                        if (tableReader.BaseStream.Position != tableReader.BaseStream.Length - 1)
+                            writer.Write(tableReader.ReadByte());
+                        else
+                            writer.Write((byte)0);
+                    }
+
+                    offset += 255;
+                }
+            }
         }
 
         private void ExportToFile(EndianBinaryWriter messageTableWriter, EndianBinaryWriter stringWriter)

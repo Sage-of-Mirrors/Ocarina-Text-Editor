@@ -132,7 +132,7 @@ namespace OcarinaTextEditor
         }
         public ICommand OnRequestSaveFilePatch
         {
-            get { return new RelayCommand(x => SaveToPatch(), x => false); }
+            get { return new RelayCommand(x => SaveToPatch(), x => MessageList != null); }
         }
         public ICommand OnRequestAddMessage
         {
@@ -206,7 +206,13 @@ namespace OcarinaTextEditor
 
         private void SaveToPatch()
         {
-            throw new NotImplementedException();
+            SaveFileDialog saveFile = new SaveFileDialog();
+            saveFile.Filter = "Playstation Patch Format files (*.ppf)|*.ppf|All files|*";
+
+            if (saveFile.ShowDialog() == true)
+            {
+                Exporter export = new Exporter(m_messageList, saveFile.FileName, Enums.ExportType.Patch, m_controlCodes);
+            }
         }
         #endregion
 
