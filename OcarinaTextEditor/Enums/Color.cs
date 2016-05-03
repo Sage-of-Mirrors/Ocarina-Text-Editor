@@ -12,8 +12,8 @@ namespace OcarinaTextEditor.Enums
         Red = 0x41,
         Green = 0x42,
         Blue = 0x43,
-        Light_Blue = 0x44,
-        Pink = 0x45,
+        Cyan = 0x44,
+        Magenta = 0x45,
         Yellow = 0x46,
         Black = 0x47
     }

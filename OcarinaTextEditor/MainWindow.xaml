@@ -54,8 +54,8 @@
                                 <MenuItem Header="Red" Command="{Binding OnRequestAddControl}" CommandParameter="Color:Red"/>
                                 <MenuItem Header="Green" Command="{Binding OnRequestAddControl}" CommandParameter="Color:Green"/>
                                 <MenuItem Header="Blue" Command="{Binding OnRequestAddControl}" CommandParameter="Color:Blue"/>
-                                <MenuItem Header="Light_Blue" Command="{Binding OnRequestAddControl}" CommandParameter="Color:Light_Blue"/>
-                                <MenuItem Header="Pink" Command="{Binding OnRequestAddControl}" CommandParameter="Color:Pink"/>
+                                <MenuItem Header="Light_Blue" Command="{Binding OnRequestAddControl}" CommandParameter="Color:Cyan"/>
+                                <MenuItem Header="Pink" Command="{Binding OnRequestAddControl}" CommandParameter="Color:Magenta"/>
                                 <MenuItem Header="Yellow" Command="{Binding OnRequestAddControl}" CommandParameter="Color:Yellow"/>
                                 <MenuItem Header="Black" Command="{Binding OnRequestAddControl}" CommandParameter="Color:Black"/>
                             </MenuItem>

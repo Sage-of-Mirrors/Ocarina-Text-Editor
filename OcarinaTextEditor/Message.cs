@@ -331,10 +331,10 @@ namespace OcarinaTextEditor
                             output.Add((byte)Color.Blue);
                             break;
                         case "light_blue":
-                            output.Add((byte)Color.Light_Blue);
+                            output.Add((byte)Color.Cyan);
                             break;
                         case "pink":
-                            output.Add((byte)Color.Pink);
+                            output.Add((byte)Color.Magenta);
                             break;
                         case "yellow":
                             output.Add((byte)Color.Yellow);
