@@ -29,6 +29,21 @@ namespace OcarinaTextEditor
             m_messageList = messageList;
             m_fileName = fileName;
 
+            // We need the char table, with an index of -4, at the start of all the entries. So we'll find it and put it at the top.
+            for (int i = 0; i < messageList.Count; i++)
+            {
+                if (messageList[i].MessageID == -4)
+                {
+                    // Message is already at the start, we do nothing here
+                    if (i == 0)
+                        break;
+
+                    Message charTable = messageList[i]; // Copy char table to buffer
+                    messageList.Insert(0, charTable); // Insert at the top of the list
+                    messageList.RemoveAt(i + 1); // Delete the original message
+                }
+            }
+
             List<byte> stringBank = new List<byte>();
 
             using (MemoryStream messageTableStream = new MemoryStream())
@@ -93,11 +108,29 @@ namespace OcarinaTextEditor
         {
             using (FileStream romFile = new FileStream(m_fileName, FileMode.Open))
             {
+                EndianBinaryWriter writer = new EndianBinaryWriter(romFile, Endian.Big);
+
                 romFile.Position = 0x00BC24C0;
                 table.CopyTo(romFile);
 
                 romFile.Position = 0x8C6000;
                 stringBank.CopyTo(romFile);
+
+                // Since OoT uses a character table for the title screen, the file select, and Link's name,
+                // And we might move this table's offset, we're going to hack the game a bit.
+                // What we'll do is make the char table the first message (like we did in the constructor above)
+                // And change the code so that it gets a start address of 0x07000000
+                // And an end address of 0x07000048.
+
+                romFile.Position = 0xAE60B6; // Set position to start address LUI lower half
+                writer.Write((short)0x0700); // Overwrite 0x0704 with 0x0700
+                romFile.Position = 0xAE60BA; // Set position to start address ADDIU lower half
+                writer.Write((short)0); // Overwite 0x80D4 with 0
+
+                romFile.Position = 0xAE60C6; // Set position to LUI lower half
+                writer.Write((short)0x0700); // Overwite 0x0704 with 0x0700
+                romFile.Position = 0xAE60F2; // Set position to end address ADDIU lower half
+                writer.Write((short)0x48); // Overwrite 0x811C with 0x0048
             }
         }
 
@@ -160,6 +193,30 @@ namespace OcarinaTextEditor
 
                     offset += 255;
                 }
+
+                writer.CurrentEndian = Endian.Little;
+                writer.Write((long)0xAE60B6);
+                writer.CurrentEndian = Endian.Big;
+                writer.Write((byte)2);
+                writer.Write((short)0x0700);
+
+                writer.CurrentEndian = Endian.Little;
+                writer.Write((long)0xAE60BA);
+                writer.CurrentEndian = Endian.Big;
+                writer.Write((byte)2);
+                writer.Write((short)0x0000);
+
+                writer.CurrentEndian = Endian.Little;
+                writer.Write((long)0xAE60C6);
+                writer.CurrentEndian = Endian.Big;
+                writer.Write((byte)2);
+                writer.Write((short)0x0700);
+
+                writer.CurrentEndian = Endian.Little;
+                writer.Write((long)0xAE60F2);
+                writer.CurrentEndian = Endian.Big;
+                writer.Write((byte)2);
+                writer.Write((short)0x0048);
             }
         }
 

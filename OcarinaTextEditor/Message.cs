@@ -188,23 +188,31 @@ namespace OcarinaTextEditor
                     codeInsides = string.Format("{0}:{1}", "Fade", numFramesFade);
                     break;
                 case ControlCode.Sound:
-                    short soundID = reader.ReadInt16();
-                    codeInsides = string.Format("{0}:{1}", "Sound", soundID);
+                    SoundType soundID = (SoundType)reader.ReadInt16();
+                    codeInsides = string.Format("{0}:{1}", "Sound", soundID.ToString().Replace("_", " "));
                     break;
                 case ControlCode.Speed:
                     byte speed = reader.ReadByte();
                     codeInsides = string.Format("{0}:{1}", "Speed", speed);
                     break;
                 case ControlCode.High_Score:
-                    short scoreID = reader.ReadInt16();
-                    codeInsides = string.Format("{0}:{1}", "High Score", scoreID);
+                    HighScore scoreID = (HighScore)reader.ReadByte();
+                    codeInsides = string.Format("{0}:{1}", "High Score", scoreID.ToString().Replace("_", " "));
                     break;
                 case ControlCode.Jump:
                     short msgID = reader.ReadInt16();
                     codeInsides = string.Format("{0}:{1}", "Jump", msgID);
                     break;
                 case ControlCode.Box_Break:
-                    return "\n\n".ToCharArray();
+                    return "\n<New Box>\n".ToCharArray();
+                case ControlCode.Background:
+                    int backgroundID;
+                    byte id1 = reader.ReadByte();
+                    byte id2 = reader.ReadByte();
+                    byte id3 = reader.ReadByte();
+                    backgroundID = BitConverter.ToInt32(new byte[] { id3, id2, id1, 0 }, 0 );
+                    codeInsides = string.Format("{0}:{1}", "Background", backgroundID);
+                    break;
 
                 default:
                     codeInsides = code.ToString().Replace("_", " ");
@@ -236,6 +244,15 @@ namespace OcarinaTextEditor
 
             for (int i = 0; i < TextData.Count(); i++)
             {
+                if (TextData[i] == '\r')
+                {
+                    TextData = TextData.Remove(i, 1);
+                    i--;
+                }
+            }
+
+            for (int i = 0; i < TextData.Count(); i++)
+            {
                 // Not a control code, copy char to output buffer
                 if (TextData[i] != '<')
                 {
@@ -247,14 +264,7 @@ namespace OcarinaTextEditor
                     {
                         try
                         {
-                            if (TextData[i + 2] == '\n')
-                                data.Add((byte)ControlCode.Box_Break);
-                            else if (TextData[i - 2] == '\n')
-                            {
-                                // Do nothing
-                            }
-                            else
-                                data.Add((byte)ControlCode.Line_Break);
+                            data.Add((byte)ControlCode.Line_Break);
                         }
                         catch (IndexOutOfRangeException ex)
                         {
@@ -295,6 +305,12 @@ namespace OcarinaTextEditor
 
                     string parsedCode = new string(controlCode.ToArray());
 
+                    if (parsedCode.ToLower() == "new box")
+                    {
+                        data.RemoveAt(data.Count - 1); // Removes the last \n, which was added during import
+                        i++; // Skips next \n, added at import
+                    }
+
                     data.AddRange(GetControlCode(parsedCode.Split(':')));
                 }
             }
@@ -330,10 +346,10 @@ namespace OcarinaTextEditor
                         case "blue":
                             output.Add((byte)Color.Blue);
                             break;
-                        case "light_blue":
+                        case "cyan":
                             output.Add((byte)Color.Cyan);
                             break;
-                        case "pink":
+                        case "magenta":
                             output.Add((byte)Color.Magenta);
                             break;
                         case "yellow":
@@ -382,7 +398,74 @@ namespace OcarinaTextEditor
                     break;
                 case "sound":
                     output.Add((byte)ControlCode.Sound);
-                    byte[] soundIDBytes = BitConverter.GetBytes(Convert.ToInt16(code[1]));
+                    short soundValue = 0;
+                    switch (code[1].ToLower())
+                    {
+                        case "item fanfare":
+                            soundValue = (short)SoundType.Item_Fanfare;
+                            break;
+                        case "frog ribbit 1":
+                            soundValue = (short)SoundType.Frog_Ribbit_1;
+                            break;
+                        case "frog ribbit 2":
+                            soundValue = (short)SoundType.Frog_Ribbit_2;
+                            break;
+                        case "deku squeak":
+                            soundValue = (short)SoundType.Deku_Squeak;
+                            break;
+                        case "deku cry":
+                            soundValue = (short)SoundType.Deku_Cry;
+                            break;
+                        case "generic event":
+                            soundValue = (short)SoundType.Generic_Event;
+                            break;
+                        case "poe vanishing":
+                            soundValue = (short)SoundType.Poe_Vanishing;
+                            break;
+                        case "twinrova 1":
+                            soundValue = (short)SoundType.Twinrova_1;
+                            break;
+                        case "twinrova 2":
+                            soundValue = (short)SoundType.Twinrova_2;
+                            break;
+                        case "navi hello":
+                            soundValue = (short)SoundType.Navi_Hello;
+                            break;
+                        case "talon ehh":
+                            soundValue = (short)SoundType.Talon_Ehh;
+                            break;
+                        case "carpenter waaaa":
+                            soundValue = (short)SoundType.Carpenter_Waaaa;
+                            break;
+                        case "navi hey":
+                            soundValue = (short)SoundType.Navi_HEY;
+                            break;
+                        case "saria giggle":
+                            soundValue = (short)SoundType.Saria_Giggle;
+                            break;
+                        case "yaaaa":
+                            soundValue = (short)SoundType.Yaaaa;
+                            break;
+                        case "zelda heh":
+                            soundValue = (short)SoundType.Zelda_Heh;
+                            break;
+                        case "zelda awww":
+                            soundValue = (short)SoundType.Zelda_Awww;
+                            break;
+                        case "zelda huh":
+                            soundValue = (short)SoundType.Zelda_Huh;
+                            break;
+                        case "generic giggle":
+                            soundValue = (short)SoundType.Generic_Giggle;
+                            break;
+                        case "unused 1":
+                            soundValue = (short)SoundType.Unused_1;
+                            break;
+                        case "moo":
+                            soundValue = (short)SoundType.Moo;
+                            break;
+                    }
+                    byte[] soundIDBytes = BitConverter.GetBytes(soundValue);
                     output.Add(soundIDBytes[1]);
                     output.Add(soundIDBytes[0]);
                     break;
@@ -396,10 +479,10 @@ namespace OcarinaTextEditor
                     break;
                 case "background":
                     output.Add((byte)ControlCode.Background);
-                    //byte[] backgroundIDBytes = BitConverter.GetBytes(Convert.ToInt32(code[1]));
-                    //output.Add(backgroundIDBytes[3]);
-                    //output.Add(backgroundIDBytes[2]);
-                    //output.Add(backgroundIDBytes[1]);
+                    byte[] backgroundIDBytes = BitConverter.GetBytes(Convert.ToInt32(code[1]));
+                    output.Add(backgroundIDBytes[2]);
+                    output.Add(backgroundIDBytes[1]);
+                    output.Add(backgroundIDBytes[0]);
                     break;
                 case "marathon time":
                     output.Add((byte)ControlCode.Marathon_Time);
@@ -427,7 +510,27 @@ namespace OcarinaTextEditor
                     break;
                 case "high score":
                     output.Add((byte)ControlCode.High_Score);
-                    //output.Add(Convert.ToByte(code[1]));
+                    switch(code[1].ToLower())
+                    {
+                        case "archery":
+                            output.Add((byte)HighScore.Archery);
+                            break;
+                        case "poe points":
+                            output.Add((byte)HighScore.Poe_Points);
+                            break;
+                        case "fishing":
+                            output.Add((byte)HighScore.Fishing);
+                            break;
+                        case "horse race":
+                            output.Add((byte)HighScore.Horse_Race);
+                            break;
+                        case "marathon":
+                            output.Add((byte)HighScore.Marathon);
+                            break;
+                        case "dampe race":
+                            output.Add((byte)HighScore.Dampe_Race);
+                            break;
+                    }
                     break;
                 case "time":
                     output.Add((byte)ControlCode.Time);
@@ -473,6 +576,9 @@ namespace OcarinaTextEditor
                     break;
                 case "d pad":
                     output.Add((byte)ControlCode.D_Pad);
+                    break;
+                case "new box":
+                    output.Add((byte)ControlCode.Box_Break);
                     break;
             }
 
