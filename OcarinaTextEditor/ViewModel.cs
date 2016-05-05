@@ -160,7 +160,7 @@ namespace OcarinaTextEditor
         {
             OpenFileDialog openFile = new OpenFileDialog();
 
-            openFile.Filter = "N64 ROMs (*.n64)|*.n64|N64 ROMs (*.z64)|*.z64|All files|*";
+            openFile.Filter = "N64 ROMs (*.n64, *.z64)|*.n64;*.z64|All files|*";
 
             if (openFile.ShowDialog() == true)
             {
@@ -256,42 +256,26 @@ namespace OcarinaTextEditor
         #region Search Filtering
         private void Filter(object sender, FilterEventArgs e)
         {
+            short findId;
+
             // see Notes on Filter Methods:
             var src = e.Item as Message;
-
+            
             if (src == null)
                 e.Accepted = false;
-
-            else if (SearchFilter.Contains("msgid"))
-            {
-                string[] parsed = SearchFilter.Split(':');
-
-                if (parsed.Count() >= 2)
-                {
-                    // Oh boy, parsing
-                    try
-                    {
-                        if (parsed[1] != "" && Convert.ToInt32(src.MessageID) != Convert.ToInt32(parsed[1]))
-                            e.Accepted = false;
-                    }
-                    // Something fucked up. Let's catch the exception
-                    catch (OverflowException ex)
-                    {
-                        SearchFilter = string.Format("msgid:{0}", int.MaxValue);
-                    }
-                    catch (FormatException ex)
-                    {
-                        SearchFilter = string.Format("msgid:{0}", parsed[1].Remove(parsed[1].Length - 1));
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine(string.Format("Exception {0}!"), ex.ToString());
-                    }
-                }
-            }
-
-            else if (src.TextData != null && !src.TextData.Contains(SearchFilter))// here is FirstName a Property in my YourCollectionItem
+            
+            //test if textbox message doesn't match our filter
+            if (src.TextData != null && !src.TextData.Contains(SearchFilter))
                 e.Accepted = false;
+
+            //test if filter matches a textbox id
+            if (SearchFilter.StartsWith("0x")
+                && short.TryParse(SearchFilter.Substring(2), System.Globalization.NumberStyles.HexNumber,
+                System.Globalization.CultureInfo.InvariantCulture, out findId))
+            {
+                if (src.MessageID == findId)
+                    e.Accepted = true;
+            }
         }
 
         private void AddFilter()
