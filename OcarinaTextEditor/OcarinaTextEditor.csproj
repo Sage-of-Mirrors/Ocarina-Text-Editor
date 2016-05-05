@@ -49,14 +49,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Resources\Ocarina_of_Time_Icon_3.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\Ocarina_of_Time_Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EndianBinaryStreams, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>lib\EndianBinaryStreams.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.WindowsAPICodePack">
+	<Reference Include="Microsoft.WindowsAPICodePack">
       <HintPath>..\packages\Microsoft.WindowsAPICodePack.Core.1.1.0\lib\Microsoft.WindowsAPICodePack.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.WindowsAPICodePack.Shell">
@@ -160,8 +160,6 @@
     <Content Include="lib\EndianBinaryStreams.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Resource Include="Resources\Ocarina_of_Time_Icon_3.ico" />
-    <Resource Include="Resources\Ocarina_of_Time_Icon_2.ico" />
     <Resource Include="Resources\Ocarina_of_Time_Icon.ico" />
   </ItemGroup>
   <ItemGroup>

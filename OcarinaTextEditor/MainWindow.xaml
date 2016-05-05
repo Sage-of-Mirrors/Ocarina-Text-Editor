@@ -4,7 +4,7 @@
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" x:Class="OcarinaTextEditor.MainWindow"
         xmlns:local="clr-namespace:OcarinaTextEditor"
         xmlns:converters="clr-namespace:OcarinaTextEditor.Converters"
-        Title="{Binding WindowTitle}" Height="450" Width="600" Icon="Resources/Ocarina_of_Time_Icon_3.ico">
+        Title="{Binding WindowTitle}" Height="450" Width="600" Icon="Resources/Ocarina_of_Time_Icon.ico">
     <Window.DataContext>
         <local:ViewModel/>
     </Window.DataContext>
@@ -23,8 +23,8 @@
                 <ListView Margin="10,31,0,10" ItemsSource="{Binding ViewSource.View}" SelectedItem="{Binding SelectedMessage, UpdateSourceTrigger=PropertyChanged}">
                     <ListView.View>
                         <GridView AllowsColumnReorder="False">
-                            <GridViewColumn Header="ID (Dec)" Width="80" DisplayMemberBinding="{Binding MessageID}"/>
-                            <GridViewColumn Header="ID (Hex)" Width="80" DisplayMemberBinding="{Binding MessageID, StringFormat=0x{0:X}}"/>
+                            <!--<GridViewColumn Header="ID (Dec)" Width="80" DisplayMemberBinding="{Binding MessageID}"/>-->
+                            <GridViewColumn Header="ID (Hex)" Width="60" DisplayMemberBinding="{Binding MessageID, StringFormat=0x{0:X4}}"/>
                             <GridViewColumn Header="Text" Width="Auto" DisplayMemberBinding="{Binding TextData}"/>
                         </GridView>
                     </ListView.View>

@@ -201,7 +201,7 @@ namespace OcarinaTextEditor
                     break;
                 case ControlCode.Jump:
                     short msgID = reader.ReadInt16();
-                    codeInsides = string.Format("{0}:{1}", "Jump", msgID);
+                    codeInsides = string.Format("{0}:{1:X4}", "Jump", msgID);
                     break;
                 case ControlCode.Box_Break:
                     return "\n<New Box>\n".ToCharArray();
@@ -366,7 +366,7 @@ namespace OcarinaTextEditor
                     break;
                 case "jump":
                     output.Add((byte)ControlCode.Jump);
-                    byte[] jumpIDBytes = BitConverter.GetBytes(Convert.ToInt16(code[1]));
+                    byte[] jumpIDBytes = BitConverter.GetBytes(short.Parse(code[1], System.Globalization.NumberStyles.HexNumber));
                     output.Add(jumpIDBytes[1]);
                     output.Add(jumpIDBytes[0]);
                     break;
