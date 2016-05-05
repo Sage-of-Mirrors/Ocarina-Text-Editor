@@ -54,8 +54,8 @@
                                 <MenuItem Header="Red" Command="{Binding OnRequestAddControl}" CommandParameter="Color:Red"/>
                                 <MenuItem Header="Green" Command="{Binding OnRequestAddControl}" CommandParameter="Color:Green"/>
                                 <MenuItem Header="Blue" Command="{Binding OnRequestAddControl}" CommandParameter="Color:Blue"/>
-                                <MenuItem Header="Light_Blue" Command="{Binding OnRequestAddControl}" CommandParameter="Color:Cyan"/>
-                                <MenuItem Header="Pink" Command="{Binding OnRequestAddControl}" CommandParameter="Color:Magenta"/>
+                                <MenuItem Header="Cyan" Command="{Binding OnRequestAddControl}" CommandParameter="Color:Cyan"/>
+                                <MenuItem Header="Magenta" Command="{Binding OnRequestAddControl}" CommandParameter="Color:Magenta"/>
                                 <MenuItem Header="Yellow" Command="{Binding OnRequestAddControl}" CommandParameter="Color:Yellow"/>
                                 <MenuItem Header="Black" Command="{Binding OnRequestAddControl}" CommandParameter="Color:Black"/>
                             </MenuItem>
@@ -79,6 +79,7 @@
                                 <MenuItem Header="Zelda Awww" Command="{Binding OnRequestAddControl}" CommandParameter="Sound:Zelda Awww"/>
                                 <MenuItem Header="Zelda Huh" Command="{Binding OnRequestAddControl}" CommandParameter="Sound:Zelda Huh"/>
                                 <MenuItem Header="Generic Giggle" Command="{Binding OnRequestAddControl}" CommandParameter="Sound:Generic Giggle"/>
+                                <MenuItem Header="Moo" Command="{Binding OnRequestAddControl}" CommandParameter="Sound:Moo"/>
                                 <MenuItem Header="Unused 1" Command="{Binding OnRequestAddControl}" CommandParameter="Sound:Unused 1"/>
                             </MenuItem>
                             <MenuItem Header="High Score">

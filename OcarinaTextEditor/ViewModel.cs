@@ -221,7 +221,7 @@ namespace OcarinaTextEditor
         {
             Message newMes = new Message();
             newMes.MessageID = GetHighestID();
-            MessageList.Add(newMes);
+            MessageList.Insert(MessageList.Count - 1, newMes);
             ViewSource.View.Refresh();
         }
 

@@ -8,7 +8,7 @@ namespace OcarinaTextEditor.Enums
 {
     public enum TextboxPosition
     {
-        Top_1,
+        Dynamic,
         Top,
         Center,
         Bottom
