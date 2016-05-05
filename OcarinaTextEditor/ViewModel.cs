@@ -176,7 +176,7 @@ namespace OcarinaTextEditor
         private void SaveToRom()
         {
             SaveFileDialog saveFile = new SaveFileDialog();
-            saveFile.Filter = "N64 ROMs (*.n64)|*.n64|N64 ROMs (*.z64)|*.z64|All files|*";
+            saveFile.Filter = "N64 ROMs (*.n64, *.z64)|*.n64;*.z64|All files|*";
 
             if (saveFile.ShowDialog() == true)
             {
