@@ -24,7 +24,7 @@
                     <ListView.View>
                         <GridView AllowsColumnReorder="False">
                             <!--<GridViewColumn Header="ID (Dec)" Width="80" DisplayMemberBinding="{Binding MessageID}"/>-->
-                            <GridViewColumn Header="ID (Hex)" Width="60" DisplayMemberBinding="{Binding MessageID, StringFormat=0x{0:X4}}"/>
+                            <GridViewColumn Header="ID" Width="60" DisplayMemberBinding="{Binding MessageID, StringFormat=0x{0:X4}}"/>
                             <GridViewColumn Header="Text" Width="Auto" DisplayMemberBinding="{Binding TextData}"/>
                         </GridView>
                     </ListView.View>
