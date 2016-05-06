@@ -35,6 +35,7 @@
         <Menu VerticalAlignment="Top" Grid.ColumnSpan="3" Height="21">
             <MenuItem Header="File">
                 <MenuItem Header="Open ROM..." Command="{Binding OnRequestOpenFile}"/>
+                <MenuItem Header="Open Generated Data..." Command="{Binding OnRequestOpenData}"/>
                 <MenuItem Header="Save to ROM..." Command="{Binding OnRequestSaveFileROM}"/>
                 <MenuItem Header="Save to PPF..." Command="{Binding OnRequestSaveFilePatch}"/>
                 <MenuItem Header="Save to Extracted Data..." Command="{Binding OnRequestSaveFileFiles}"/>
