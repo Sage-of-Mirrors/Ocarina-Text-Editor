@@ -122,6 +122,10 @@ namespace OcarinaTextEditor
         {
             get { return new RelayCommand(x => Open(), x => true); }
         }
+        public ICommand OnRequestOpenData
+        {
+            get { return new RelayCommand(x => OpenData(), x => true); }
+        }
         public ICommand OnRequestSaveFileROM
         {
             get { return new RelayCommand(x => SaveToRom(), x => MessageList != null); }
@@ -171,6 +175,37 @@ namespace OcarinaTextEditor
 
                 WindowTitle = string.Format("{0} - Ocarina of Time Text Editor", openFile.FileName);
             }
+        }
+
+        private void OpenData()
+        {
+            OpenFileDialog openFile = new OpenFileDialog();
+            string tableFileName;
+            string messageDataFileName;
+
+            openFile.Filter = "Table Data (*.tbl)|*.tbl|All files|*";
+            openFile.Title = "Select the MessageTable.tbl file";
+
+            if (openFile.ShowDialog() != true)
+                return;
+
+            tableFileName = openFile.FileName;
+
+            openFile.Filter = "String Data (*.bin)|*.bin|All files|*";
+            openFile.Title = "Select the StringData.bin file";
+            openFile.FilterIndex = 0;
+
+            if (openFile.ShowDialog() != true)
+                return;
+
+            messageDataFileName = openFile.FileName;
+
+            Importer file = new Importer(tableFileName, messageDataFileName, m_controlCodes);
+            MessageList = file.GetMessageList();
+            ViewSource.Source = MessageList;
+            SelectedMessage = MessageList[0];
+
+            WindowTitle = string.Format("{0} - Ocarina of Time Text Editor", tableFileName);
         }
 
         private void SaveToRom()

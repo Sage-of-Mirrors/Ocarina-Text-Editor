@@ -91,28 +91,13 @@ namespace OcarinaTextEditor
             TextData = "";
         }
 
-        public Message(EndianBinaryReader reader, Dictionary<ControlCode, string> controlCodeDict)
+        public Message(EndianBinaryReader reader, TableRecord mesgTableRecord, Dictionary<ControlCode, string> controlCodeDict)
         {
-            MessageID = reader.ReadInt16();
-
-            byte typePosField = reader.ReadByte();
-
-            BoxType = (TextboxType)((typePosField & 0xF0) >> 4);
-            BoxPosition = (TextboxPosition)(typePosField & 0x0F);
-
-            reader.SkipByte();
-
-            uint offset = reader.ReadUInt32();
-
-            offset = offset & 0x00ffffff;
-
-            int cuPos = (int)reader.BaseStream.Position;
-
-            reader.BaseStream.Position = 0x8C6000 + offset;
+            MessageID = mesgTableRecord.MessageID;
+            BoxType = mesgTableRecord.BoxType;
+            BoxPosition = mesgTableRecord.BoxPosition;
 
             GetStringData(reader, controlCodeDict);
-
-            reader.BaseStream.Position = cuPos;
         }
 
         public void Print()
