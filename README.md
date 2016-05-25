@@ -2,7 +2,7 @@
 A text editor for The Legend of Zelda: Ocarina of Time. This editor currently only works on the Master Quest Debug version. Other versions may be supported in the future.
 
 
-![Program image](http://i.imgur.com/mdevXFf.png)
+![Program image](http://i.imgur.com/Xzrh09W.png)
 
 ## Features
 
@@ -18,8 +18,8 @@ same results.
 
 #### Message ID Search
 
-*Ocarina of Time* gives each message a unique ID for use in the game. Typing in the string "msgid:" followed by an ID will display the message with that ID, if it exists.
-For example, msgid:20 will search for a message with an ID of 20. The ID must be in decimal format, and *not* hexadecimal.
+*Ocarina of Time* gives each message a unique ID for use in the game. Typing in the string "0x" followed by an ID in hexadecimal will display the message with that ID, if it exists.
+For example, 0x20 will search for a message with an ID of 0x20, or 32 in decimal.
 
 ### Control Tags
 
