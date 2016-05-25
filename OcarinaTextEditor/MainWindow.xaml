@@ -51,14 +51,14 @@
                         <Separator/>
                         <MenuItem Header="Control Tags...">
                             <MenuItem Header="Color">
-                                <MenuItem Header="White" Command="{Binding OnRequestAddControl}" CommandParameter="Color:White"/>
-                                <MenuItem Header="Red" Command="{Binding OnRequestAddControl}" CommandParameter="Color:Red"/>
-                                <MenuItem Header="Green" Command="{Binding OnRequestAddControl}" CommandParameter="Color:Green"/>
-                                <MenuItem Header="Blue" Command="{Binding OnRequestAddControl}" CommandParameter="Color:Blue"/>
-                                <MenuItem Header="Cyan" Command="{Binding OnRequestAddControl}" CommandParameter="Color:Cyan"/>
-                                <MenuItem Header="Magenta" Command="{Binding OnRequestAddControl}" CommandParameter="Color:Magenta"/>
-                                <MenuItem Header="Yellow" Command="{Binding OnRequestAddControl}" CommandParameter="Color:Yellow"/>
-                                <MenuItem Header="Black" Command="{Binding OnRequestAddControl}" CommandParameter="Color:Black"/>
+                                <MenuItem Header="White" Command="{Binding OnRequestAddControl}" CommandParameter="W"/>
+                                <MenuItem Header="Red" Command="{Binding OnRequestAddControl}" CommandParameter="R"/>
+                                <MenuItem Header="Green" Command="{Binding OnRequestAddControl}" CommandParameter="G"/>
+                                <MenuItem Header="Blue" Command="{Binding OnRequestAddControl}" CommandParameter="B"/>
+                                <MenuItem Header="Cyan" Command="{Binding OnRequestAddControl}" CommandParameter="C"/>
+                                <MenuItem Header="Magenta" Command="{Binding OnRequestAddControl}" CommandParameter="M"/>
+                                <MenuItem Header="Yellow" Command="{Binding OnRequestAddControl}" CommandParameter="Y"/>
+                                <MenuItem Header="Black" Command="{Binding OnRequestAddControl}" CommandParameter="Blk"/>
                             </MenuItem>
                             <MenuItem Header="Sound">
                                 <MenuItem Header="Item Fanfare" Command="{Binding OnRequestAddControl}" CommandParameter="Sound:Item Fanfare"/>
@@ -93,12 +93,13 @@
                             </MenuItem>
                             <MenuItem Header="New Textbox" Command="{Binding OnRequestAddControl}" CommandParameter="New Box"/>
                             <MenuItem Header="Player Name" Command="{Binding OnRequestAddControl}" CommandParameter="Player"/>
-                            <MenuItem Header="No Skip" Command="{Binding OnRequestAddControl}" CommandParameter="No Skip"/>
+                            <MenuItem Header="No Skip" Command="{Binding OnRequestAddControl}" CommandParameter="NS"/>
                             <MenuItem Header="Icon" Command="{Binding OnRequestAddControl}" CommandParameter="Icon:0"/>
                             <MenuItem Header="Speed" Command="{Binding OnRequestAddControl}" CommandParameter="Speed:0"/>
+                            <MenuItem Header="Shop Description" Command="{Binding OnRequestAddControl}" CommandParameter="Shop Description"/>
                             <Separator/>
-                            <MenuItem Header="Draw Instant" Command="{Binding OnRequestAddControl}" CommandParameter="Draw Instant"/>
-                            <MenuItem Header="Draw Char" Command="{Binding OnRequestAddControl}" CommandParameter="Draw Char"/>
+                            <MenuItem Header="Draw Instant" Command="{Binding OnRequestAddControl}" CommandParameter="DI"/>
+                            <MenuItem Header="Draw Char" Command="{Binding OnRequestAddControl}" CommandParameter="DC"/>
                             <Separator/>
                             <MenuItem Header="Two Choices" Command="{Binding OnRequestAddControl}" CommandParameter="Two Choices"/>
                             <MenuItem Header="Three Choices" Command="{Binding OnRequestAddControl}" CommandParameter="Three Choices"/>

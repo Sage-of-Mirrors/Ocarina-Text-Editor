@@ -8,13 +8,13 @@ namespace OcarinaTextEditor.Enums
 {
     public enum Color
     {
-        White = 0x40,
-        Red = 0x41,
-        Green = 0x42,
-        Blue = 0x43,
-        Cyan = 0x44,
-        Magenta = 0x45,
-        Yellow = 0x46,
-        Black = 0x47
+        W = 0x40,
+        R = 0x41,
+        G = 0x42,
+        B = 0x43,
+        C = 0x44,
+        M = 0x45,
+        Y = 0x46,
+        Blk = 0x47
     }
 }

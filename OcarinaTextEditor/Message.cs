@@ -152,7 +152,7 @@ namespace OcarinaTextEditor
             {
                 case ControlCode.Color:
                     Color col = (Color)reader.ReadByte();
-                    codeInsides = string.Format("{0}:{1}", "Color", col.ToString());
+                    codeInsides = col.ToString();
                     break;
                 case ControlCode.Icon:
                     byte iconID = reader.ReadByte();
@@ -190,6 +190,15 @@ namespace OcarinaTextEditor
                     break;
                 case ControlCode.Box_Break:
                     return "\n<New Box>\n".ToCharArray();
+                case ControlCode.No_Skip:
+                    codeInsides = "NS";
+                    break;
+                case ControlCode.Draw_Instant:
+                    codeInsides = "DI";
+                    break;
+                case ControlCode.Draw_Char:
+                    codeInsides = "DC";
+                    break;
                 case ControlCode.Background:
                     int backgroundID;
                     byte id1 = reader.ReadByte();
@@ -315,35 +324,29 @@ namespace OcarinaTextEditor
                 case "box break":
                     output.Add((byte)ControlCode.Box_Break);
                     break;
-                case "color":
-                    output.Add((byte)ControlCode.Color);
-                    switch (code[1].ToLower())
-                    {
-                        case "white":
-                            output.Add((byte)Color.White);
-                            break;
-                        case "red":
-                            output.Add((byte)Color.Red);
-                            break;
-                        case "green":
-                            output.Add((byte)Color.Green);
-                            break;
-                        case "blue":
-                            output.Add((byte)Color.Blue);
-                            break;
-                        case "cyan":
-                            output.Add((byte)Color.Cyan);
-                            break;
-                        case "magenta":
-                            output.Add((byte)Color.Magenta);
-                            break;
-                        case "yellow":
-                            output.Add((byte)Color.Yellow);
-                            break;
-                        case "black":
-                            output.Add((byte)Color.Black);
-                            break;
-                    }
+                case "w":
+                    output.Add((byte)Color.W);
+                    break;
+                case "r":
+                    output.Add((byte)Color.R);
+                    break;
+                case "g":
+                    output.Add((byte)Color.G);
+                    break;
+                case "b":
+                    output.Add((byte)Color.B);
+                    break;
+                case "c":
+                    output.Add((byte)Color.C);
+                    break;
+                case "m":
+                    output.Add((byte)Color.M);
+                    break;
+                case "y":
+                    output.Add((byte)Color.Y);
+                    break;
+                case "blk":
+                    output.Add((byte)Color.Blk);
                     break;
                 case "pixels right":
                     output.Add((byte)ControlCode.Spaces);
@@ -355,10 +358,10 @@ namespace OcarinaTextEditor
                     output.Add(jumpIDBytes[1]);
                     output.Add(jumpIDBytes[0]);
                     break;
-                case "draw instant":
+                case "di":
                     output.Add((byte)ControlCode.Draw_Instant);
                     break;
-                case "draw char":
+                case "dc":
                     output.Add((byte)ControlCode.Draw_Char);
                     break;
                 case "shop description":
@@ -481,7 +484,7 @@ namespace OcarinaTextEditor
                 case "gold skulltulas":
                     output.Add((byte)ControlCode.Gold_Skulltulas);
                     break;
-                case "no skip":
+                case "ns":
                     output.Add((byte)ControlCode.No_Skip);
                     break;
                 case "two choices":
