@@ -7,12 +7,14 @@ using System.Threading.Tasks;
 using GameFormatReader.Common;
 using System.IO;
 using OcarinaTextEditor.Enums;
+using System.Windows;
 
 namespace OcarinaTextEditor
 {
     class Importer
     {
         private ObservableCollection<Message> m_messageList;
+        private MemoryStream m_inputFile;
 
         public Importer()
         {
@@ -21,30 +23,41 @@ namespace OcarinaTextEditor
         
         public Importer(string fileName, Dictionary<ControlCode, string> controlCodeDict)
         {
-            m_messageList = new ObservableCollection<Message>();
-
             List<TableRecord> tableRecordList = new List<TableRecord>();
 
-            using (FileStream stream = new FileStream(fileName, FileMode.Open))
+            try
             {
-                EndianBinaryReader reader = new EndianBinaryReader(stream, Endian.Big);
-
-                reader.BaseStream.Seek(0x00BC24C0, 0);
-
-                //Read in message table records
-                while (reader.PeekReadInt16() != -1)
+                using (FileStream stream = new FileStream(fileName, FileMode.Open, FileAccess.Read))
                 {
-                    TableRecord mesRecord = new TableRecord(reader);
-                    tableRecordList.Add(mesRecord);
-                }
+                    m_messageList = new ObservableCollection<Message>();
 
-                foreach(var mesgRecord in tableRecordList)
-                {
-                    reader.BaseStream.Position = 0x8C6000 + mesgRecord.Offset;
-                    Message mes = new Message(reader, mesgRecord, controlCodeDict);
+                    m_inputFile = new MemoryStream();
+                    stream.CopyTo(m_inputFile);
 
-                    m_messageList.Add(mes);
+                    EndianBinaryReader reader = new EndianBinaryReader(stream, Endian.Big);
+
+                    reader.BaseStream.Seek(0x00BC24C0, 0);
+
+                    //Read in message table records
+                    while (reader.PeekReadInt16() != -1)
+                    {
+                        TableRecord mesRecord = new TableRecord(reader);
+                        tableRecordList.Add(mesRecord);
+                    }
+
+                    foreach (var mesgRecord in tableRecordList)
+                    {
+                        reader.BaseStream.Position = 0x8C6000 + mesgRecord.Offset;
+                        Message mes = new Message(reader, mesgRecord, controlCodeDict);
+
+                        m_messageList.Add(mes);
+                    }
                 }
+            }
+            catch (IOException ex)
+            {
+                MessageBox.Show("The chosen ROM is open in another program. Please close that program and open the ROM again.", "ROM is Already In Use");
+                return;
             }
         }
 
@@ -84,6 +97,11 @@ namespace OcarinaTextEditor
         public ObservableCollection<Message> GetMessageList()
         {
             return m_messageList;
+        }
+
+        public MemoryStream GetInputFile()
+        {
+            return m_inputFile;
         }
     }
 }

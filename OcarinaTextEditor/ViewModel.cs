@@ -116,6 +116,7 @@ namespace OcarinaTextEditor
         public int TextboxPosition;
 
         private MemoryStream m_inputFile;
+        private string m_inputFileName;
 
         #region Command Callbacks
         public ICommand OnRequestOpenFile
@@ -126,9 +127,17 @@ namespace OcarinaTextEditor
         {
             get { return new RelayCommand(x => OpenData(), x => true); }
         }
-        public ICommand OnRequestSaveFileROM
+        public ICommand OnRequestCloseFile
         {
-            get { return new RelayCommand(x => SaveToRom(), x => MessageList != null); }
+            get { return new RelayCommand(x => Close(), x => MessageList != null); }
+        }
+        public ICommand OnRequestSaveFileNewROM
+        {
+            get { return new RelayCommand(x => SaveToNewRom(), x => MessageList != null); }
+        }
+        public ICommand OnRequestSaveFileOriginalROM
+        {
+            get { return new RelayCommand(x => SaveToOriginalRom(), x => MessageList != null); }
         }
         public ICommand OnRequestSaveFileFiles
         {
@@ -170,6 +179,14 @@ namespace OcarinaTextEditor
             {
                 Importer file = new Importer(openFile.FileName, m_controlCodes);
                 MessageList = file.GetMessageList();
+
+                // If message list is null, we failed to open a ROM
+                if (MessageList == null)
+                    return;
+
+                m_inputFileName = openFile.FileName;
+                m_inputFile = file.GetInputFile();
+
                 ViewSource.Source = MessageList;
                 SelectedMessage = MessageList[0];
 
@@ -208,15 +225,22 @@ namespace OcarinaTextEditor
             WindowTitle = string.Format("{0} - Ocarina of Time Text Editor", tableFileName);
         }
 
-        private void SaveToRom()
+        private void SaveToNewRom()
         {
             SaveFileDialog saveFile = new SaveFileDialog();
             saveFile.Filter = "N64 ROMs (*.n64, *.z64)|*.n64;*.z64|All files|*";
 
             if (saveFile.ShowDialog() == true)
             {
-                Exporter export = new Exporter(m_messageList, saveFile.FileName, Enums.ExportType.ROM, m_controlCodes);
+                Exporter export = new Exporter(m_messageList, saveFile.FileName, Enums.ExportType.NewROM, m_controlCodes, m_inputFile);
+                m_inputFileName = saveFile.FileName;
+                WindowTitle = string.Format("{0} - Ocarina of Time Text Editor", m_inputFileName);
             }
+        }
+
+        private void SaveToOriginalRom()
+        {
+            Exporter export = new Exporter(m_messageList, m_inputFileName, Enums.ExportType.OriginalROM, m_controlCodes, m_inputFile);
         }
 
         private void SaveToFiles()
@@ -248,6 +272,15 @@ namespace OcarinaTextEditor
             {
                 Exporter export = new Exporter(m_messageList, saveFile.FileName, Enums.ExportType.Patch, m_controlCodes);
             }
+        }
+
+        private void Close()
+        {
+            MessageList = null;
+            m_inputFile = null;
+            m_inputFileName = "";
+            ViewSource.Source = null;
+            WindowTitle = "Ocarina of Time Text Editor";
         }
         #endregion
 

@@ -36,9 +36,15 @@
             <MenuItem Header="File">
                 <MenuItem Header="Open ROM..." Command="{Binding OnRequestOpenFile}"/>
                 <MenuItem Header="Open Generated Data..." Command="{Binding OnRequestOpenData}"/>
-                <MenuItem Header="Save to ROM..." Command="{Binding OnRequestSaveFileROM}"/>
+                <Separator/>
+                <MenuItem Header="Save to ROM" IsEnabled="{Binding MessageList, Converter={StaticResource NullToFalseConverter}}">
+                    <MenuItem Header="Save" Command="{Binding OnRequestSaveFileOriginalROM}"/>
+                    <MenuItem Header="Save as..." Command="{Binding OnRequestSaveFileNewROM}"/>
+                </MenuItem>
                 <MenuItem Header="Save to PPF..." Command="{Binding OnRequestSaveFilePatch}"/>
                 <MenuItem Header="Save to Extracted Data..." Command="{Binding OnRequestSaveFileFiles}"/>
+                <Separator/>
+                <MenuItem Header="Close File" Command="{Binding OnRequestCloseFile}"/>
             </MenuItem>
         </Menu>
         <DockPanel LastChildFill="True" Margin="0,123,9,10" Grid.Column="2">

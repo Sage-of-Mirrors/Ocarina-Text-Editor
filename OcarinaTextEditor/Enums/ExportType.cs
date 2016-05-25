@@ -8,7 +8,8 @@ namespace OcarinaTextEditor.Enums
 {
     public enum ExportType
     {
-        ROM,
+        NewROM,
+        OriginalROM,
         Patch,
         File
     }

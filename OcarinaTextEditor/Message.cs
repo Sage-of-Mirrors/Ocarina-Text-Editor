@@ -325,27 +325,35 @@ namespace OcarinaTextEditor
                     output.Add((byte)ControlCode.Box_Break);
                     break;
                 case "w":
+                    output.Add(5);
                     output.Add((byte)Color.W);
                     break;
                 case "r":
+                    output.Add(5);
                     output.Add((byte)Color.R);
                     break;
                 case "g":
+                    output.Add(5);
                     output.Add((byte)Color.G);
                     break;
                 case "b":
+                    output.Add(5);
                     output.Add((byte)Color.B);
                     break;
                 case "c":
+                    output.Add(5);
                     output.Add((byte)Color.C);
                     break;
                 case "m":
+                    output.Add(5);
                     output.Add((byte)Color.M);
                     break;
                 case "y":
+                    output.Add(5);
                     output.Add((byte)Color.Y);
                     break;
                 case "blk":
+                    output.Add(5);
                     output.Add((byte)Color.Blk);
                     break;
                 case "pixels right":
