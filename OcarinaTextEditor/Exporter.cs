@@ -159,6 +159,7 @@ namespace OcarinaTextEditor
                     ExtensionMethods.PadByteList4(stringBank);
                 }
 
+                // Write end-of-list message
                 messageTableWriter.Write((short)-1);
                 messageTableWriter.Write((short)0);
                 messageTableWriter.Write((int)0);
